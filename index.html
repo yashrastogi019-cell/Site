@@ -1,64 +1,370 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Simple Ideas for a Better Daily Life</title>
-  <meta charset="UTF-8">
-  <meta name="description" content="Practical simple ideas and habits to improve focus, productivity, and consistency in daily life.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Play Neon Dash, a free addictive arcade game. Dodge the falling blocks and beat your high score!">
+    <title>Neon Dash - Free Arcade Game</title>
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --primary: #00f2ff;
+            --secondary: #7000ff;
+            --bg: #0f172a;
+            --text: #e2e8f0;
+            --panel: #1e293b;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { background-color: var(--bg); color: var(--text); display: flex; flex-direction: column; min-height: 100vh; }
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
 
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9887641022199579"
-     crossorigin="anonymous"></script>
+        /* --- HEADER & NAV --- */
+        header { background: var(--panel); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--secondary); }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; }
+        nav ul { display: flex; gap: 20px; list-style: none; }
+        nav a { color: white; font-weight: 500; cursor: pointer; }
 
-  <style>
-    body { font-family: Arial; background:#f5f5f5; padding:40px; }
-    .card { background:#fff; padding:30px; max-width:800px; margin:auto; border-radius:8px; }
-    h1, h2 { color:#333; }
-    p { line-height:1.6; color:#444; }
-    nav { margin-top:30px; text-align:center; }
-    a { margin: 0 10px; text-decoration:none; }
-  </style>
+        /* --- LAYOUT GRID --- */
+        .container { display: flex; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 20px; gap: 20px; flex: 1; }
+        
+        /* Sidebar for Ads (Desktop) */
+        .ad-sidebar { flex: 1; min-width: 200px; background: #162032; border-radius: 8px; display: flex; align-items: center; justify-content: center; min-height: 400px; border: 1px dashed #444; }
+        .ad-placeholder { color: #666; font-size: 0.9rem; text-align: center; padding: 20px; }
+
+        /* Main Game Area */
+        .game-wrapper { flex: 3; min-width: 300px; display: flex; flex-direction: column; align-items: center; }
+        
+        #gameCanvas { background: #000; border: 4px solid var(--secondary); border-radius: 8px; box-shadow: 0 0 20px rgba(112, 0, 255, 0.3); max-width: 100%; cursor: pointer; }
+        
+        .game-info { width: 100%; display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 1.2rem; }
+        .controls-hint { margin-top: 10px; color: #94a3b8; font-size: 0.9rem; text-align: center; }
+
+        /* Content Section (Crucial for AdSense text requirements) */
+        .content-section { width: 100%; background: var(--panel); padding: 20px; border-radius: 8px; margin-top: 30px; line-height: 1.6; }
+        .content-section h2 { color: var(--primary); margin-bottom: 10px; }
+
+        /* --- FOOTER --- */
+        footer { background: var(--panel); text-align: center; padding: 20px; margin-top: auto; border-top: 1px solid #333; font-size: 0.9rem; }
+        footer a { margin: 0 10px; }
+
+        /* --- MODALS (Privacy/Contact) --- */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: var(--panel); width: 90%; max-width: 600px; padding: 30px; border-radius: 8px; position: relative; max-height: 80vh; overflow-y: auto; border: 1px solid var(--secondary); }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #fff; }
+        .modal h2 { margin-bottom: 15px; color: var(--primary); }
+        .modal p { margin-bottom: 15px; font-size: 0.95rem; color: #cbd5e1; }
+
+        /* --- COOKIE CONSENT --- */
+        #cookie-banner { position: fixed; bottom: 0; left: 0; width: 100%; background: #222; color: #fff; padding: 15px; text-align: center; border-top: 2px solid var(--primary); z-index: 999; display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; }
+        .cookie-btn { background: var(--primary); color: #000; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+
+        /* --- BUTTONS & FORMS --- */
+        .btn { background: var(--secondary); color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; margin-top: 10px; }
+        .btn:hover { background: #8a2be2; }
+        input, textarea { width: 100%; padding: 10px; margin: 10px 0; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 4px; }
+        
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .ad-sidebar { min-height: 100px; width: 100%; order: -1; } /* Ads on top for mobile is risky, better bottom or between content */
+            #gameCanvas { width: 100%; height: auto; aspect-ratio: 4/5; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="card">
-  <h1>Simple Ideas to Improve Your Daily Life</h1>
+    <header>
+        <div class="logo">NeonDash</div>
+        <nav>
+            <ul>
+                <li><a onclick="showModal('privacy-modal')">Privacy</a></li>
+                <li><a onclick="showModal('contact-modal')">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <p>Simple Ideas is a small collection of practical habits and thoughts designed to help students and working professionals improve focus, productivity, and consistency. These ideas are simple on purpose — they are easy to apply and do not require complicated systems or expensive tools.</p>
+    <div class="container">
+        
+        <aside class="ad-sidebar">
+            <div class="ad-placeholder">
+                <p>Advertisement</p>
+                <small>(Place Vertical Ad Unit Here)</small>
+            </div>
+        </aside>
 
-  <h2>1. Start With One Small Habit</h2>
-  <p>Instead of trying to change everything at once, choose one small habit and commit to it for a week. For example, read for 10 minutes every morning or write a short plan for your day. Small wins build confidence and momentum.</p>
+        <main class="game-wrapper">
+            <div class="game-info">
+                <span>Score: <span id="score">0</span></span>
+                <span>High Score: <span id="highscore">0</span></span>
+            </div>
+            
+            <canvas id="gameCanvas" width="400" height="600"></canvas>
+            
+            <p class="controls-hint">Click/Tap to Start • Use Left/Right Arrow Keys or Touch Sides to Move</p>
+            
+            <button id="restartBtn" class="btn" style="display:none;" onclick="resetGame()">Play Again</button>
 
-  <h2>2. Use Time Blocking</h2>
-  <p>Divide your day into focused blocks of time for specific tasks. During each block, remove distractions like phone notifications and social media. This improves concentration and helps you finish tasks faster.</p>
+            <section class="content-section">
+                <h2>About Neon Dash</h2>
+                <p>Welcome to Neon Dash, a fast-paced arcade browser game designed to test your reflexes. The goal is simple: avoid the falling neon blocks. As you progress, the speed increases, challenging your reaction time. This game is built with HTML5 and requires no downloads.</p>
+                <h3>How to Play</h3>
+                <p>On desktop, use your keyboard's <strong>Left</strong> and <strong>Right</strong> arrow keys to steer the ball. On mobile devices, simply tap the left or right side of the game area to move. Survive as long as you can to set a new high score!</p>
+            </section>
+        </main>
 
-  <h2>3. Keep a Distraction List</h2>
-  <p>Whenever a distracting thought appears, write it down instead of acting on it immediately. This trains your brain to stay focused while still acknowledging other thoughts safely.</p>
+        <aside class="ad-sidebar">
+            <div class="ad-placeholder">
+                <p>Advertisement</p>
+                <small>(Place Vertical Ad Unit Here)</small>
+            </div>
+        </aside>
+    </div>
 
-  <h2>4. Reflect at the End of the Day</h2>
-  <p>Spend five minutes every evening reviewing what went well and what can be improved tomorrow. Reflection helps you learn from experience and gradually improve your routines.</p>
+    <footer>
+        <p>&copy; 2024 Neon Dash Game. All rights reserved.</p>
+        <p>
+            <a onclick="showModal('privacy-modal')">Privacy Policy</a> | 
+            <a onclick="showModal('terms-modal')">Terms of Service</a>
+        </p>
+    </footer>
 
-  <h2>5. Sleep and Health Matter</h2>
-  <p>No productivity system works if your body is exhausted. Prioritize sleep, light exercise, and hydration. These habits have a larger impact than most people realize.</p>
+    <div id="cookie-banner">
+        <p>We use cookies to personalize content and ads, and to analyze our traffic. By using our site, you consent to our use of cookies.</p>
+        <button class="cookie-btn" onclick="acceptCookies()">I Accept</button>
+    </div>
 
-  <!-- Ad placement AFTER meaningful content -->
-  <ins class="adsbygoogle"
-       style="display:block; margin-top:30px;"
-       data-ad-client="ca-pub-9887641022199579"
-       data-ad-slot="1234567890"
-       data-ad-format="auto"
-       data-full-width-responsive="true"
-       data-loading-strategy="lazy"></ins>
+    <div id="privacy-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('privacy-modal')">&times;</span>
+            <h2>Privacy Policy</h2>
+            <p><strong>Last Updated: [Current Date]</strong></p>
+            <p>Your privacy is important to us. This policy explains how we handle information.</p>
+            
+            <h3>1. Data Collection</h3>
+            <p>We do not collect personal data (like names or emails) directly unless you submit them via our contact form. However, third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites.</p>
+            
+            <h3>2. Cookies and Ads</h3>
+            <p>Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to this site and/or other sites on the Internet. You may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank">Google Ad Settings</a>.</p>
+            
+            <h3>3. Analytics</h3>
+            <p>We may use tools to analyze traffic patterns to improve the game experience. This data is anonymized.</p>
+            
+            <h3>4. Contact</h3>
+            <p>If you have questions about this policy, please contact us via the contact form.</p>
+        </div>
+    </div>
 
-  <script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
+    <div id="contact-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('contact-modal')">&times;</span>
+            <h2>Contact Us</h2>
+            <p>Have feedback or found a bug? Let us know!</p>
+            <form onsubmit="event.preventDefault(); alert('Thank you for your message! (This is a demo form)'); closeModal('contact-modal');">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea rows="4" placeholder="Your Message" required></textarea>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+    </div>
 
-  <nav>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="privacy-policy.html">Privacy Policy</a>
-  </nav>
-</div>
+    <div id="terms-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('terms-modal')">&times;</span>
+            <h2>Terms of Service</h2>
+            <p>By accessing this website, you are agreeing to be bound by these website Terms and Conditions of Use, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws.</p>
+            <p>Permission is granted to temporarily play the materials (information or software) on Neon Dash's website for personal, non-commercial transitory viewing only.</p>
+        </div>
+    </div>
 
+    <script>
+        /* --- COOKIE LOGIC --- */
+        if(localStorage.getItem('cookiesAccepted')) {
+            document.getElementById('cookie-banner').style.display = 'none';
+        }
+        function acceptCookies() {
+            localStorage.setItem('cookiesAccepted', 'true');
+            document.getElementById('cookie-banner').style.display = 'none';
+        }
+
+        /* --- MODAL LOGIC --- */
+        function showModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        // Close modal if clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = "none";
+            }
+        }
+
+        /* --- GAME ENGINE --- */
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        const highscoreEl = document.getElementById('highscore');
+        const restartBtn = document.getElementById('restartBtn');
+
+        // Game State
+        let gameRunning = false;
+        let score = 0;
+        let highscore = localStorage.getItem('neonHighscore') || 0;
+        highscoreEl.innerText = highscore;
+        let speed = 3;
+        
+        // Player
+        const player = { x: 180, y: 550, width: 30, height: 30, color: '#00f2ff', speed: 5 };
+        
+        // Enemies
+        let enemies = [];
+        let frameCount = 0;
+
+        // Input
+        let leftPressed = false;
+        let rightPressed = false;
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === "ArrowLeft") leftPressed = true;
+            if(e.key === "ArrowRight") rightPressed = true;
+            if(!gameRunning && e.key === "Enter") resetGame();
+        });
+        document.addEventListener('keyup', (e) => {
+            if(e.key === "ArrowLeft") leftPressed = false;
+            if(e.key === "ArrowRight") rightPressed = false;
+        });
+
+        // Touch Controls
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touchX = e.touches[0].clientX;
+            const rect = canvas.getBoundingClientRect();
+            const relativeX = touchX - rect.left;
+            
+            if (!gameRunning) {
+                resetGame();
+                return;
+            }
+            if(relativeX < rect.width / 2) leftPressed = true;
+            else rightPressed = true;
+        });
+        canvas.addEventListener('touchend', (e) => {
+            leftPressed = false;
+            rightPressed = false;
+        });
+        // Click to start for desktop users
+        canvas.addEventListener('mousedown', () => {
+            if (!gameRunning) resetGame();
+        });
+
+        function drawPlayer() {
+            ctx.fillStyle = player.color;
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = player.color;
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+            ctx.shadowBlur = 0;
+        }
+
+        function createEnemy() {
+            const width = Math.random() * 50 + 20;
+            const x = Math.random() * (canvas.width - width);
+            enemies.push({ x: x, y: -50, width: width, height: 20, color: '#ff0055' });
+        }
+
+        function drawEnemies() {
+            ctx.fillStyle = '#ff0055';
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = '#ff0055';
+            enemies.forEach(enemy => {
+                ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+            });
+            ctx.shadowBlur = 0;
+        }
+
+        function update() {
+            if (!gameRunning) return;
+
+            // Player Movement
+            if (leftPressed && player.x > 0) player.x -= player.speed;
+            if (rightPressed && player.x < canvas.width - player.width) player.x += player.speed;
+
+            // Enemy Logic
+            frameCount++;
+            if (frameCount % 60 === 0) { // Spawn rate
+                createEnemy();
+                score++;
+                scoreEl.innerText = score;
+                if(score % 10 === 0) speed += 0.5; // Increase difficulty
+            }
+
+            enemies.forEach((enemy, index) => {
+                enemy.y += speed;
+
+                // Collision Detection
+                if (
+                    player.x < enemy.x + enemy.width &&
+                    player.x + player.width > enemy.x &&
+                    player.y < enemy.y + enemy.height &&
+                    player.height + player.y > enemy.y
+                ) {
+                    gameOver();
+                }
+
+                // Remove off-screen enemies
+                if (enemy.y > canvas.height) enemies.splice(index, 1);
+            });
+
+            // Draw
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPlayer();
+            drawEnemies();
+
+            // Draw Start Text if just initialized (but not running)
+            if(!gameRunning && score === 0) {
+                ctx.fillStyle = "white";
+                ctx.font = "20px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText("Click or Press Enter to Start", canvas.width/2, canvas.height/2);
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        function gameOver() {
+            gameRunning = false;
+            ctx.fillStyle = "white";
+            ctx.font = "30px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText("GAME OVER", canvas.width/2, canvas.height/2);
+            ctx.font = "16px Arial";
+            ctx.fillText(`Final Score: ${score}`, canvas.width/2, canvas.height/2 + 30);
+            
+            if(score > highscore) {
+                highscore = score;
+                localStorage.setItem('neonHighscore', highscore);
+                highscoreEl.innerText = highscore;
+            }
+            restartBtn.style.display = 'block';
+        }
+
+        function resetGame() {
+            if(gameRunning) return;
+            score = 0;
+            speed = 3;
+            enemies = [];
+            player.x = canvas.width / 2 - 15;
+            scoreEl.innerText = 0;
+            gameRunning = true;
+            restartBtn.style.display = 'none';
+            update();
+        }
+
+        // Initial Draw
+        ctx.fillStyle = "white";
+        ctx.font = "20px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Click to Start", canvas.width/2, canvas.height/2);
+
+    </script>
 </body>
 </html>
